@@ -5,7 +5,10 @@
 <script src="{{ "/assets/js/jquery.hoverex.min.js" | prepend: site.baseurl }}"></script>
 <script src="{{ "/assets/js/jquery.prettyPhoto.js" | prepend: site.baseurl }}"></script>
 <script src="{{ "/assets/js/jquery.isotope.min.js" | prepend: site.baseurl }}"></script>
+<script src="{{ "/assets/js/handlebars.js" | prepend: site.baseurl }}"></script>
 <script src="{{ "/assets/js/custom.js" | prepend: site.baseurl }}"></script>
+<script src="{{ "/assets/js/twitch.js" | prepend: site.baseurl }}"></script>
+
 {% if site.analytics %}
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -22,14 +25,16 @@
 // Portfolio
 (function($) {
 	"use strict";
-	var $container = $('.portfolio'),
-		$items = $container.find('.portfolio-item'),
-		portfolioLayout = 'fitRows';
+	var $container = $('.portfolio');
+	function initializePortfolio() {
 		
+		var $items = $container.find('.portfolio-item'),
+		portfolioLayout = 'fitRows';
+			
 		if( $container.hasClass('portfolio-centered') ) {
 			portfolioLayout = 'masonry';
 		}
-				
+
 		$container.isotope({
 			filter: '*',
 			animationEngine: 'best-available',
@@ -39,15 +44,15 @@
 			easing: 'linear',
 			queue: false
 		},
-		masonry: {
-		}
+			masonry: {
+			}
 		}, refreshWaypoints());
 		
 		function refreshWaypoints() {
 			setTimeout(function() {
 			}, 1000);   
 		}
-				
+
 		$('nav.portfolio-filter ul a').on('click', function() {
 				var selector = $(this).attr('data-filter');
 				$container.isotope({ filter: selector }, refreshWaypoints());
@@ -55,48 +60,48 @@
 				$(this).addClass('active');
 				return false;
 		});
-		
-		function getColumnNumber() { 
-			var winWidth = $(window).width(), 
-			columnNumber = 1;
-		
-			if (winWidth > 1200) {
-				columnNumber = 5;
-			} else if (winWidth > 950) {
-				columnNumber = 4;
-			} else if (winWidth > 600) {
-				columnNumber = 3;
-			} else if (winWidth > 400) {
-				columnNumber = 2;
-			} else if (winWidth > 250) {
-				columnNumber = 1;
-			}
-				return columnNumber;
-			}       
-			
-			function setColumns() {
-				var winWidth = $(window).width(), 
-				columnNumber = getColumnNumber(), 
-				itemWidth = Math.floor(winWidth / columnNumber);
-				
-				$container.find('.portfolio-item').each(function() { 
-					$(this).css( { 
-					width : itemWidth + 'px' 
-				});
-			});
-		}
-		
-		function setPortfolio() { 
-			setColumns();
-			$container.isotope('reLayout');
-		}
-			
 		$container.imagesLoaded(function () { 
 			setPortfolio();
 		});
-		
-		$(window).on('resize', function () { 
-		setPortfolio();          
+	}
+
+	function setPortfolio() { 
+		$container.isotope('reLayout');
+	}
+
+	function onNowPlayingFetched(response) {
+		var source   = $("#portfolio-template").html();
+		var template = Handlebars.compile(source);
+		$('.portfolio').html(template(response));
+		initializePortfolio();
+	}
+
+	function fetchNowPlaying() {
+		$.getJSON('http://api.probableprime.co.uk/api/nowplaying').done(onNowPlayingFetched);
+	}
+
+	
+
+	$(window).on('resize', function () { 
+		setPortfolio();
 	});
+	function onTwitchStatus(status) {
+		console.log('BISJDFOIJfsjif');
+		console.log(status);
+		if(status) {
+			$('.twitch-offline').hide();
+			$('.twitch-live').show();
+		} else {
+			$('.twitch-live').hide();
+			$('.twitch-offline').show();
+		}
+	}
+	function checkTwitch() {
+		jekyllTwitch.isOnline('{{site.twitch.channel}}').done(onTwitchStatus);
+	}
+	window.setInterval(10*1000,checkTwitch);
+
+	checkTwitch();
+	fetchNowPlaying();
 })(jQuery);
 </script>
