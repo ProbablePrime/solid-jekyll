@@ -54,6 +54,10 @@ tel: +34 8493-4893
 ### GENERAL DATA FOR VARIOUS LOCATIONS ###
     
 # Members information. Shown on About page.
+# 
+# 
+friends:
+  - name: Dee
 members:
   - name: Mark Webber
     position: CEO
@@ -104,7 +108,7 @@ clients:
     img: client04.png
     
 # Short text about your company. Shown in footer on every page and also separately on Home and Contact page.
-about: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s."
+about: "A Variety caster. Curator of all the weird games. Collector of films beginning with 'The'. Whale noise enthusiast. "
 
 # Testimonial content. Shown on Home and About page. 
 testimonial:

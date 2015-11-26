@@ -1,6 +1,20 @@
-<div id="headerwrap">
+<div class="blue twitch">
     <div class="container">
-        <div class="row">
+        <div class="row twitch-toggle" data-toggle="collapse" data-target="#headerwrap">
+            <div class="col-lg-2">
+                <h3>Watch Live!</h3>
+            </div>
+            <div class="col-lg-2 col-lg-offset-8">
+                <div class="toggle-indicator">
+                <i class="fa fa-chevron-down"></i>
+                </div>
+            </div>
+        </div><!-- /row -->
+    </div> <!-- /container -->
+</div>
+<div id="headerwrap" class="collapse">
+    <div class="container">
+    <div class="row">
             <div class="col-lg-8 col-lg-offset-2 himg twitch-offline" style="display:none;">
                 <img src="{{ "/assets/img/offline.png" | prepend: site.baseurl }}" class="img-responsive">
             </div>
@@ -10,3 +24,5 @@
         </div><!-- /row -->
     </div> <!-- /container -->
 </div><!-- /headerwrap -->
+<script type="text/javascript">
+</script>

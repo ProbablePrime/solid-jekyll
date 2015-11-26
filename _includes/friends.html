@@ -1,21 +1,21 @@
 <div class="portfoliowrap">
     <div class="portfolio-centered">
-        <h3>Now Playing</h3>
-        <div class="recentitems portfolio now-playing">
+        <h3>Friends</h3>
+        <div class="recentitems portfolio friends">
         </div>
     </div>
 </div>
-<script id="nowplaying-template" type="text/x-handlebars-template">
+<script id="friends-template" type="text/x-handlebars-template">
 {% raw %}
-    {{#each games}}
+    {{#each friends}}
         <div class="portfolio-item graphic-design">
             <div class="he-wrap tpl6">
-            <img src="{{box.cached}}" alt="">
+            <img src="{{logo}}" alt="" style="width:200px;height:200px;">
                 <div class="he-view">
                     <div class="bg a0" data-animate="fadeIn">
                         <h3 class="a1" data-animate="fadeInDown">{{ name }}</h3>
-                        <p class="a1" data-animate="fadeInDown" >{{description}}</p>
-                        <a href="" class="dmbutton a2" data-animate="fadeInUp"><i class="fa fa-link"></i></a>
+                        <p class="a1" data-animate="fadeInDown" style="color:#FFF;">Last Playing <br />{{last_game}}</p>
+                        <a href="{{url}}" class="dmbutton a2" data-animate="fadeInUp"><i class="fa fa-link"></i></a>
                     </div><!-- he bg -->
                 </div><!-- he view -->
             </div><!-- he wrap -->

@@ -25,9 +25,8 @@
 // Portfolio
 (function($) {
 	"use strict";
-	var $container = $('.portfolio');
-	function initializePortfolio() {
-		
+	function initializePortfolio(target) {
+		var $container = target;
 		var $items = $container.find('.portfolio-item'),
 		portfolioLayout = 'fitRows';
 			
@@ -61,29 +60,39 @@
 				return false;
 		});
 		$container.imagesLoaded(function () { 
-			setPortfolio();
+			setPortfolio($container);
 		});
 	}
 
-	function setPortfolio() { 
+	function setPortfolio($container) { 
 		$container.isotope('reLayout');
 	}
 
 	function onNowPlayingFetched(response) {
-		var source   = $("#portfolio-template").html();
+		var source   = $("#nowplaying-template").html();
 		var template = Handlebars.compile(source);
-		$('.portfolio').html(template(response));
-		initializePortfolio();
+		$('.now-playing').html(template(response));
+		initializePortfolio($('.now-playing'));
+	}
+
+	function onFriendsFetched(response) {
+		var source   = $("#friends-template").html();
+		var template = Handlebars.compile(source);
+		$('.friends').html(template(response));
+		initializePortfolio($('.friends'));
 	}
 
 	function fetchNowPlaying() {
 		$.getJSON('http://api.probableprime.co.uk/api/nowplaying').done(onNowPlayingFetched);
 	}
-
+	function fetchFriends() {
+		$.getJSON('http://api.probableprime.co.uk/api/friends').done(onFriendsFetched);
+	}
 	
 
 	$(window).on('resize', function () { 
-		setPortfolio();
+		setPortfolio($('.friends'));
+		setPortfolio($('.now-playing'));
 	});
 	function onTwitchStatus(status) {
 		console.log('BISJDFOIJfsjif');
@@ -91,6 +100,7 @@
 		if(status) {
 			$('.twitch-offline').hide();
 			$('.twitch-live').show();
+			$('.twitch-toggle').toggle('show');
 		} else {
 			$('.twitch-live').hide();
 			$('.twitch-offline').show();
@@ -100,8 +110,28 @@
 		jekyllTwitch.isOnline('{{site.twitch.channel}}').done(onTwitchStatus);
 	}
 	window.setInterval(10*1000,checkTwitch);
+	if($('.twitch-toggle')) {
+		checkTwitch();
+		fetchNowPlaying();
+		fetchFriends();
 
-	checkTwitch();
-	fetchNowPlaying();
+		var target = $('.twitch-toggle');
+	    target.collapse();
+	    $('#headerwrap').on('hidden.bs.collapse', toggleTwitch);
+	    $('#headerwrap').on('shown.bs.collapse', toggleTwitch);
+	    console.log(target);
+	}
+
+	function toggleTwitch(e) {
+		console.log(e)
+		var target = $('.twitch-toggle');
+		var $toggle = $(target).closest('.twitch-toggle');
+		console.log($toggle);
+		if(e.type === 'hidden') {
+			$toggle.find('.fa').removeClass('fa-chevron-up').addClass('fa-chevron-down');
+		} else if (e.type ==='shown') {
+			$toggle.find('.fa').removeClass('fa-chevron-down').addClass('fa-chevron-up');
+		}
+	}
 })(jQuery);
 </script>
